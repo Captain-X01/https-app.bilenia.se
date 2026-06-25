@@ -1,0 +1,61 @@
+{
+  "name": "bilenia-mobile-app",
+  "version": "1.0.0",
+  "description": "Bilenia native app shell (Capacitor) – paketerar React-build från bilenia-dealer-panel",
+  "main": "index.js",
+  "scripts": {
+    "fetch:frontend": "bash scripts/fetch-frontend.sh",
+    "build:web:dev": "NATIVE_BUILD_PROFILE=development bash scripts/build-web.sh",
+    "build:web:prod": "NATIVE_BUILD_PROFILE=production bash scripts/build-web.sh",
+    "build:web": "npm run build:web:dev",
+    "sync:android:dev": "NATIVE_BUILD_PROFILE=development bash scripts/apply-native-build-profile.sh && npx cap sync android",
+    "sync:android:prod": "NATIVE_BUILD_PROFILE=production bash scripts/apply-native-build-profile.sh && NATIVE_BUILD_PROFILE=production npx cap sync android",
+    "sync:android": "npm run sync:android:dev",
+    "build:android:dev": "npm run build:web:dev && npm run sync:android:dev",
+    "build:android:prod": "npm run build:web:prod && npm run sync:android:prod",
+    "sync:ios:dev": "NATIVE_BUILD_PROFILE=development bash scripts/apply-native-build-profile.sh && npx cap sync ios",
+    "sync:ios:prod": "NATIVE_BUILD_PROFILE=production bash scripts/apply-native-build-profile.sh && NATIVE_BUILD_PROFILE=production npx cap sync ios",
+    "build:ios:dev": "npm run build:web:dev && npm run sync:ios:dev",
+    "build:ios:prod": "npm run build:web:prod && npm run sync:ios:prod",
+    "keystore:android": "bash scripts/create-android-keystore.sh",
+    "print:api-host": "node scripts/print-dev-api-host.js",
+    "assets:native": "node scripts/generate-native-assets.js",
+    "patch:www": "bash scripts/patch-www-mobile.sh",
+    "sync": "npx cap sync",
+    "open:android": "npx cap open android",
+    "open:ios": "npx cap open ios"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Captain-X01/https-app.bilenia.se.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Captain-X01/https-app.bilenia.se/issues"
+  },
+  "homepage": "https://github.com/Captain-X01/https-app.bilenia.se#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.3.4",
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/browser": "^8.0.0",
+    "@capacitor/camera": "^8.2.0",
+    "@capacitor/core": "^8.3.4",
+    "@capacitor/filesystem": "^8.0.0",
+    "@capacitor/haptics": "^8.0.0",
+    "@capacitor/ios": "^8.3.4",
+    "@capacitor/keyboard": "^8.0.0",
+    "@capacitor/network": "^8.0.0",
+    "@capacitor/share": "^8.0.0",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.3.4",
+    "@types/node": "^25.8.0",
+    "sharp": "^0.34.5",
+    "typescript": "^6.0.3"
+  }
+}

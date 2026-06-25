@@ -1,0 +1,146 @@
+/* Applied only in Capacitor native app (see mobile-boot.js) */
+html.bilenia-native-app,
+html.bilenia-native-app body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  /* Safe area: header top + main padding-top + bottom nav — not body padding (avoids double inset). */
+}
+
+html.bilenia-native-app input,
+html.bilenia-native-app textarea,
+html.bilenia-native-app [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Lock viewport while web splash is visible (prevents scroll behind overlay) */
+html.bilenia-native-app.bilenia-splash-active,
+html.bilenia-native-app.bilenia-splash-active body {
+  overflow: hidden !important;
+  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100%;
+  max-width: 100vw;
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+  touch-action: none;
+  -webkit-overflow-scrolling: auto;
+}
+
+html.bilenia-native-app.bilenia-splash-active #root {
+  overflow: hidden;
+  max-height: 100dvh;
+}
+
+#bilenia-mobile-splash {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  max-width: 100vw;
+  z-index: 2147483646;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  background: #000000;
+  transition: opacity 0.4s ease;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  box-sizing: border-box;
+}
+
+#bilenia-mobile-splash.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#bilenia-mobile-splash .bilenia-splash-word {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.25rem, 11vw, 3.5rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffffff;
+  min-height: 1.2em;
+  text-align: center;
+}
+
+#bilenia-mobile-splash .bilenia-splash-word .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, 12px, 0) scale(0.94);
+  will-change: opacity, transform;
+  animation: bilenia-char-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+#bilenia-mobile-splash .bilenia-splash-word .char.flicker {
+  animation:
+    bilenia-char-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    bilenia-flicker 0.14s ease-in-out 2;
+}
+
+#bilenia-mobile-splash .bilenia-splash-word .char.glow {
+  animation:
+    bilenia-char-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    bilenia-glow 1.8s ease-in-out 0.9s infinite;
+}
+
+@keyframes bilenia-char-in {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes bilenia-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes bilenia-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    text-shadow: 0 0 22px rgba(255, 255, 255, 0.55), 0 0 8px rgba(212, 175, 55, 0.35);
+  }
+}
+
+#bilenia-exit-hint {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%) translateY(12px);
+  z-index: 100000;
+  max-width: min(90vw, 320px);
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  background: rgba(20, 20, 20, 0.92);
+  color: #fff;
+  font: 500 0.875rem/1.3 system-ui, sans-serif;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+#bilenia-exit-hint.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Bilenia</string>
+    <string name="title_activity_main">Bilenia</string>
+    <string name="package_name">se.bilenia.app</string>
+    <string name="custom_url_scheme">se.bilenia.app</string>
+</resources>

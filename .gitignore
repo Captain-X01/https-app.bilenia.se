@@ -1,0 +1,16 @@
+node_modules/
+.frontend/
+.DS_Store
+*.log
+.env
+.env.local
+.cursor/
+
+# Byggd webbapp — genereras av build-web.sh (committa inte)
+www/
+
+# Android signing (aldrig i git)
+android/keystore.properties
+android/*.keystore
+android/bilenia-release.keystore
+android/.idea/
