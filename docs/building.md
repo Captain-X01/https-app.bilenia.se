@@ -101,3 +101,5 @@ NATIVE_BUILD_PROFILE=development npx cap sync android
 | Emulator Android | `VITE_API_BASE_URL=http://10.0.2.2:5000/api/v1` |
 | USB + adb | `adb reverse tcp:5000 tcp:5000` + `localhost` i .env |
 | `npm run build:android:prod` failar på Windows | Kör `bash scripts/build-web.sh` med `NATIVE_BUILD_PROFILE` |
+| Xcode: `missing package product 'CapacitorApp'` | `cap sync ios` kördes på Windows → backslashes i `ios/App/CapApp-SPM/Package.swift`. Kör **endast på Mac**: `node scripts/fix-ios-spm-paths.js` (eller `npm run sync:ios:prod`), sedan Xcode **File → Packages → Reset Package Caches**. Kräver `npm install` i shell-repot så `node_modules/` finns. |
+| iOS sync generellt | Kör **aldrig** `cap sync ios` på Windows — endast macOS. Android sync fungerar på Windows. |

@@ -48,6 +48,26 @@ Samma värden finns i `ios/App/App.xcodeproj/project.pbxproj`.
 
 Efter frontend-ändring: ny prod web-build → `cap sync ios` → ny Archive.
 
+## Felsökning: missing package product CapacitorApp
+
+Orsak: `cap sync ios` på **Windows** skriver Windows-sökvägar (`..\..\..\node_modules\...`) i `ios/App/CapApp-SPM/Package.swift`. Swift på Mac kräver `/`.
+
+**Återställ på Mac:**
+
+```bash
+cd https-app.bilenia.se
+git pull
+npm install
+node scripts/fix-ios-spm-paths.js
+# eller hela kedjan:
+FRONTEND_REF=epic/mobile_app npm run fetch:frontend
+npm run build:ios:prod
+```
+
+I Xcode: **File → Packages → Reset Package Caches**, sedan **Product → Clean Build Folder**, bygg igen.
+
+Framåt: kör alltid `cap sync ios` / `npm run build:ios:prod` på Mac. `npm run sync:ios:*` kör automatiskt path-fix efter sync.
+
 ## Splash och ikoner på iOS
 
 Genereras av `generate-native-assets.js` vid web-build:
