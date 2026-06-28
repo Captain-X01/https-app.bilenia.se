@@ -53,5 +53,9 @@
 	<string>Bilenia behöver åtkomst till bilder för att ladda upp foton.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Bilenia behöver spara bilder i ditt bibliotek.</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 </dict>
 </plist>
