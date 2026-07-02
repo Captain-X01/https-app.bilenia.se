@@ -13,7 +13,7 @@
 
 - Mac med Xcode
 - [Apple Developer Program](https://developer.apple.com/programs/) (betald)
-- Bundle ID: `se.bilenia.app` (matcha `capacitor.config.ts`)
+- Bundle ID: `se.bilenia.auctions` (matcha `capacitor.config.ts`)
 
 ## Synka web till iOS
 
@@ -31,7 +31,7 @@ Eller: `NATIVE_BUILD_PROFILE=production bash scripts/build-web.sh && NATIVE_BUIL
 
 1. Öppna `ios/App/App.xcworkspace` i Xcode
 2. **Signing & Capabilities** → välj Team, Automatic signing
-3. Verifiera **Bundle Identifier** = `se.bilenia.app`
+3. Verifiera **Bundle Identifier** = `se.bilenia.auctions`
 4. **Product → Archive**
 5. **Distribute App** → App Store Connect / TestFlight
 

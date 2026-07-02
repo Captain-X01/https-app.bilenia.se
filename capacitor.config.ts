@@ -12,8 +12,15 @@ const isProductionBuild =
   process.env.NATIVE_BUILD_PROFILE === 'production' ||
   process.env.VITE_ENV === 'production';
 
+const nativePlatform =
+  process.env.BILENIA_NATIVE_PLATFORM ||
+  (process.argv.includes('android') ? 'android' : undefined);
+
+const appId =
+  nativePlatform === 'android' ? 'se.bilenia.app' : 'se.bilenia.auctions';
+
 const config: CapacitorConfig = {
-  appId: 'se.bilenia.app',
+  appId,
   appName: 'BILENIA',
   webDir: 'www',
   android: {
