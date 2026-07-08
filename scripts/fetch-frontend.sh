@@ -2,12 +2,16 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CLI_FRONTEND_REF="${FRONTEND_REF:-}"
 ENV_FILE="${ROOT}/.env"
 if [ -f "$ENV_FILE" ]; then
   set -a
   # shellcheck disable=SC1091
   source "$ENV_FILE"
   set +a
+fi
+if [ -n "$CLI_FRONTEND_REF" ]; then
+  FRONTEND_REF="$CLI_FRONTEND_REF"
 fi
 
 FRONTEND_DIR="${ROOT}/.frontend/bilenia-dealer-panel"

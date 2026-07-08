@@ -46,12 +46,15 @@ function splashSvg(width, height) {
 }
 
 /**
- * Launcher icon: BILENIA scaled into adaptive-icon safe zone (~66% circle).
+ * Launcher icon: BILENIA on white.
+ * Android adaptive foreground uses extra padding (safe zone is ~66% of the mask).
+ * iOS shows the full square under the squircle — use tighter padding + larger type.
  */
-function launcherIconSvg(size, { transparentBg = false } = {}) {
-  const pad = size * 0.18;
+function launcherIconSvg(size, { transparentBg = false, platform = "android" } = {}) {
+  const isIos = platform === "ios";
+  const pad = size * (isIos ? 0.13 : 0.18);
   const inner = size - pad * 2;
-  const fontSize = Math.round(inner * 0.2);
+  const fontSize = Math.round(inner * (isIos ? 0.22 : 0.2));
   const letterSpacing = Math.round(fontSize * 0.08);
   const bg = transparentBg
     ? ""
@@ -125,7 +128,7 @@ async function generateIcons() {
   }
 
   const iosIcon = path.join(ROOT, "ios", "App", "App", "Assets.xcassets", "AppIcon.appiconset", "AppIcon-512@2x.png");
-  await sharp(launcherIconSvg(1024)).png().toFile(iosIcon);
+  await sharp(launcherIconSvg(1024, { platform: "ios" })).png().toFile(iosIcon);
 
   const iosSplashDir = path.join(ROOT, "ios", "App", "App", "Assets.xcassets", "Splash.imageset");
   await ensureDir(iosSplashDir);
