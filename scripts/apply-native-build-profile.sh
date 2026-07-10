@@ -14,7 +14,13 @@ set_manifest_cleartext() {
     echo "Warning: AndroidManifest not found at $MANIFEST" >&2
     return 0
   fi
-  sed -i "s/android:usesCleartextTraffic=\"\(true\|false\)\"/android:usesCleartextTraffic=\"${value}\"/" "$MANIFEST"
+  # GNU sed (Linux/Git Bash) vs BSD sed (macOS): different -i syntax; use -E not \| alternation.
+  local pattern="s/android:usesCleartextTraffic=\"(true|false)\"/android:usesCleartextTraffic=\"${value}\"/"
+  if [[ "${OSTYPE:-}" == darwin* ]]; then
+    sed -i '' -E "$pattern" "$MANIFEST"
+  else
+    sed -i -E "$pattern" "$MANIFEST"
+  fi
 }
 
 if [ "$PROFILE" = "production" ]; then
