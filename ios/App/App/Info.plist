@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>CAPACITOR_DEBUG</key>
@@ -7,7 +8,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Bilenia</string>
+        <string>BILENIA</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -23,7 +24,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
-	<true/>
+	<true />
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -46,16 +47,17 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
+	<true />
 	<key>NSCameraUsageDescription</key>
-	<string>Bilenia behöver kameran för att ta bilder till din profil och fordonsannonser.</string>
+	<string
+    >Bilenia behöver kameran för att ta bilder till din profil och fordonsannonser.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Bilenia behöver åtkomst till bilder för att ladda upp foton.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Bilenia behöver spara bilder i ditt bibliotek.</string>
 	<key>UIFileSharingEnabled</key>
-	<true/>
+	<true />
 	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
+	<true />
 </dict>
 </plist>
