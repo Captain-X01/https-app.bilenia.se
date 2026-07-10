@@ -54,8 +54,8 @@ function launcherIconSvg(size, { transparentBg = false, platform = "android" } =
   const isIos = platform === "ios";
   const pad = size * (isIos ? 0.13 : 0.18);
   const inner = size - pad * 2;
-  const fontSize = Math.round(inner * (isIos ? 0.22 : 0.2));
-  const letterSpacing = Math.round(fontSize * 0.08);
+  const fontSize = Math.round(isIos ? size * 0.18 : inner * 0.2);
+  const letterSpacing = Math.round(fontSize * (isIos ? 0.06 : 0.08));
   const bg = transparentBg
     ? ""
     : `<rect width="100%" height="100%" fill="${ICON_BG}"/>`;
