@@ -4,6 +4,8 @@
  */
 const AUTH_PATH = "/auth";
 const DASHBOARD_PATH = "/dashboard";
+const GUEST_HOME_PATH = "/auctions";
+const GUEST_SESSION_KEY = "bilenia_native_guest_session";
 const STORAGE_KEY = "bilenia_native_auth";
 const PUBLIC_ENTRY_PATHS = new Set(["/", "/index.html", ""]);
 const SPLASH_SESSION_KEY = "bilenia_splash_shown";
@@ -52,7 +54,7 @@ function hasStoredTokens() {
 }
 
 function getColdStartPath() {
-  return hasStoredTokens() ? DASHBOARD_PATH : AUTH_PATH;
+  return hasStoredTokens() ? DASHBOARD_PATH : GUEST_HOME_PATH;
 }
 
 function getHashPath() {
@@ -101,6 +103,23 @@ function ensureNativeEntry() {
   sessionStorage.removeItem(NATIVE_SESSION_KEY);
 
   const hashPath = getHashPath();
+  if (
+    !hadSession ||
+    hashPath === AUTH_PATH ||
+    !hashPath ||
+    hashPath === "/"
+  ) {
+    try {
+      sessionStorage.setItem(GUEST_SESSION_KEY, "1");
+    } catch {
+      /* ignore */
+    }
+    if (hashPath !== GUEST_HOME_PATH) {
+      setHashRoute(GUEST_HOME_PATH);
+    }
+    return;
+  }
+
   if (isRoutableHash(hashPath)) return;
 
   const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
