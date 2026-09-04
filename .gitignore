@@ -11,4 +11,6 @@ www/
 android/keystore.properties
 android/*.keystore
 android/bilenia-release.keystore
+android/*.pem
+android/upload_certificate.pem
 android/.idea/
