@@ -37,6 +37,13 @@ Eller: `NATIVE_BUILD_PROFILE=production bash scripts/build-web.sh && NATIVE_BUIL
 
 ## Versioner vid uppdatering
 
+Sätt i `.env.production` (samma värden som Android; appliceras till `project.pbxproj` vid prod-sync):
+
+```bash
+NATIVE_VERSION_NAME=1.0.8
+NATIVE_VERSION_CODE=9
+```
+
 I Xcode → target **App** → **General**:
 
 | Fält | Xcode-nyckel | Regel |

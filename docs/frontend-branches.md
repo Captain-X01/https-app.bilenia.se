@@ -46,7 +46,7 @@ Pusha till `epic/mobile_app`, fetcha om i shell — **samma keystore och samma s
 ## Framtida uppdateringar
 
 1. Utveckla i `bilenia-dealer-panel` (feature branch → `main_proxy`).
-2. Bump `versionCode` / `versionName` (Android) och `MARKETING_VERSION` (iOS).
+2. Bump `NATIVE_VERSION_NAME` / `NATIVE_VERSION_CODE` i `.env.production`.
 3. `fetch` + prod build + sync + signera + ladda upp.
 
 Frontend-ändringar kräver **inte** ny keystore — bara ny web-build och ny store-version.

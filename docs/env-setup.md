@@ -28,6 +28,8 @@
 | `VITE_API_BASE_URL_SOCKET_IO` | Socket.IO |
 | `VITE_WEB_APP_URL` | Webapp-URL (länkar, open-in-app) |
 | `VITE_ENV` | `development` eller `production` |
+| `NATIVE_VERSION_NAME` | Store-version, t.ex. `1.0.8` (Android `versionName`, iOS `MARKETING_VERSION`) |
+| `NATIVE_VERSION_CODE` | Heltal som måste öka per uppladdning (Android `versionCode`, iOS `CURRENT_PROJECT_VERSION`) |
 
 ## FRONTEND_REF — vilken branch?
 

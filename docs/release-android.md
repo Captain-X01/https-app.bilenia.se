@@ -59,19 +59,17 @@ Ladda upp `.aab` till [Google Play Console](https://play.google.com/console).
 
 ## Versioner vid uppdatering
 
-Redigera `android/app/build.gradle`:
+Sätt i `.env.production` (appliceras till Gradle/Xcode vid `build:android:prod` / `sync:android:prod`):
 
-```gradle
-defaultConfig {
-    versionCode 2        // Heltal — MÅSTE öka varje uppladdning
-    versionName "1.0.1"  // Visas för användare (valfritt format)
-}
+```bash
+NATIVE_VERSION_NAME=1.0.8
+NATIVE_VERSION_CODE=9
 ```
 
-| Fält | Regel |
-|------|--------|
-| `versionCode` | Strikt ökande heltal (1, 2, 3, …) |
-| `versionName` | Fri text ("1.0.1", "1.1.0") |
+| Fält | Env | Regel |
+|------|-----|--------|
+| `versionCode` / `CURRENT_PROJECT_VERSION` | `NATIVE_VERSION_CODE` | Strikt ökande heltal (1, 2, 3, …) |
+| `versionName` / `MARKETING_VERSION` | `NATIVE_VERSION_NAME` | Fri text ("1.0.8", "1.1.0") |
 
 Efter ändring: prod build + ny signed AAB.
 
