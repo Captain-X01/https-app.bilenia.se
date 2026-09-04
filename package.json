@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/Captain-X01/https-app.bilenia.se#readme",
   "dependencies": {
+    "@capacitor-community/file-opener": "^8.0.1",
     "@capacitor/android": "^8.3.4",
     "@capacitor/app": "^8.1.0",
     "@capacitor/browser": "^8.0.0",
