@@ -39,6 +39,9 @@ inte `.ics`-nedladdning. Webb + Android behåller ICS-flödet.
 Bygg om i Xcode efter pull — ingen `cap sync` behövs för själva Swift-pluginen (den ligger i App-target).
 `cap sync ios` behövs fortfarande för ny `www/`-frontend.
 
+Pluginen anropar `requestWriteOnlyAccessToEvents` (iOS 17+) innan editorn — då visas systemprompten en gång.
+Om låsskärmen "does not have access to your calendars" kvarstår: **Inställningar → Integritet → Kalendrar → Bilenia**, eller radera/installera om appen.
+
 ## Första release
 
 1. Öppna `ios/App/App.xcworkspace` i Xcode
