@@ -27,6 +27,18 @@ npm run open:ios
 
 Eller: `NATIVE_BUILD_PROFILE=production bash scripts/build-web.sh && NATIVE_BUILD_PROFILE=production npx cap sync ios`
 
+## Kalender (native iOS)
+
+Native iPhone/iPad använder `BileniaCalendarPlugin` (EventKitUI / `EKEventEditViewController`) —
+inte `.ics`-nedladdning. Webb + Android behåller ICS-flödet.
+
+- Swift: `ios/App/App/BileniaCalendarPlugin.swift` (registreras i `BridgeViewController`)
+- JS: `addToCalendar.ts` → `BileniaCalendar.addCalendarEvent` endast när `Capacitor.getPlatform() === "ios"`
+- Info.plist: `NSCalendarsUsageDescription` + `NSCalendarsWriteOnlyAccessUsageDescription`
+
+Bygg om i Xcode efter pull — ingen `cap sync` behövs för själva Swift-pluginen (den ligger i App-target).
+`cap sync ios` behövs fortfarande för ny `www/`-frontend.
+
 ## Första release
 
 1. Öppna `ios/App/App.xcworkspace` i Xcode

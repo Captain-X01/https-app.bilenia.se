@@ -55,6 +55,11 @@
 	<string>Bilenia behöver åtkomst till bilder för att ladda upp foton.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Bilenia behöver spara bilder i ditt bibliotek.</string>
+	<!-- Calendar: EKEventEditViewController (iOS 17+) needs no access prompt; keys keep older iOS / write-only paths safe. -->
+	<key>NSCalendarsUsageDescription</key>
+	<string>Bilenia behöver kalenderåtkomst så du kan lägga till auktionspåminnelser.</string>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>Bilenia behöver kunna lägga till auktionspåminnelser i din kalender.</string>
 	<key>UIFileSharingEnabled</key>
 	<true />
 	<key>LSSupportsOpeningDocumentsInPlace</key>
