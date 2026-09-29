@@ -23,6 +23,18 @@ const config: CapacitorConfig = {
   appId,
   appName: 'BILENIA',
   webDir: 'www',
+  // Avoid SPM package identity collision for @capacitor-firebase/messaging (Capacitor CLI 8.4+).
+  experimental: {
+    ios: {
+      spm: {
+        packageOptions: {
+          '@capacitor-firebase/messaging': {
+            symlink: true,
+          },
+        },
+      },
+    },
+  },
   android: {
     allowMixedContent: !isProductionBuild,
   },
@@ -56,6 +68,9 @@ const config: CapacitorConfig = {
     Keyboard: {
       resize: KeyboardResize.Body,
       resizeOnFullScreen: true,
+    },
+    FirebaseMessaging: {
+      presentationOptions: ['badge', 'sound', 'alert'],
     },
   },
 };

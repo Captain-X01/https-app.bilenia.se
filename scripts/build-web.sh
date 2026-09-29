@@ -24,12 +24,18 @@ fi
 export NATIVE_BUILD_PROFILE="$PROFILE"
 bash "${ROOT}/scripts/apply-native-build-profile.sh"
 
-FRONTEND_DIR="${ROOT}/.frontend/bilenia-dealer-panel"
 OUT_DIR_NAME="${FRONTEND_OUT_DIR:-dist}"
+if [ -n "${FRONTEND_LOCAL_PATH:-}" ] && [ -d "$FRONTEND_LOCAL_PATH" ]; then
+  FRONTEND_DIR="$FRONTEND_LOCAL_PATH"
+  echo "Använder lokal frontend: ${FRONTEND_DIR}"
+else
+  FRONTEND_DIR="${ROOT}/.frontend/bilenia-dealer-panel"
+fi
 FRONTEND_OUT="${FRONTEND_DIR}/${OUT_DIR_NAME}"
 
 if [ ! -d "$FRONTEND_DIR" ]; then
   echo "Saknar frontend. Kör först: npm run fetch:frontend" >&2
+  echo "Eller sätt FRONTEND_LOCAL_PATH i .env till din lokala bilenia-frontend." >&2
   exit 1
 fi
 

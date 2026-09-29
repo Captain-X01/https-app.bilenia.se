@@ -49,7 +49,7 @@ Se [docs/project-structure.md](docs/project-structure.md).
 
 | Guide | Innehåll |
 |-------|----------|
-| [docs/building.md](docs/building.md) | Fetch, dev/prod-build, sync |
+| [docs/building.md](docs/building.md) | Fetch, dev/prod-build, sync, **Firebase `google-services.json`** |
 | [docs/release-android.md](docs/release-android.md) | Keystore, AAB, versionCode, uppdateringar |
 | [docs/release-ios.md](docs/release-ios.md) | Xcode, Archive, TestFlight, versioner |
 | [docs/env-setup.md](docs/env-setup.md) | .env-filer och FRONTEND_REF |

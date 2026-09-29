@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "206566227867",
+    "project_id": "bilenia-production",
+    "storage_bucket": "bilenia-production.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206566227867:android:8f97721c0c5c6f54dceb3e",
+        "android_client_info": {
+          "package_name": "se.bilenia.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrhpU6_tS0eyB__7bgNFPMOZ2aN8RdNTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
