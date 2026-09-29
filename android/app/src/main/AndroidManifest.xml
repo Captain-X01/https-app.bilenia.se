@@ -86,6 +86,14 @@
                     android:pathPrefix="/orders" />
             </intent-filter>
 
+            <!-- Custom scheme return from BankID Custom Tabs (does not need App Link verification) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="se.bilenia.app" />
+            </intent-filter>
+
         </activity>
 
         <provider

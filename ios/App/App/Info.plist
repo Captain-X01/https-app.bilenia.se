@@ -68,5 +68,19 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<!-- Custom scheme return from BankID / SFSafariViewController.
+	     Bundle ID is se.bilenia.auctions; URL schemes can differ and both are registered. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>se.bilenia.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>se.bilenia.app</string>
+				<string>se.bilenia.auctions</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
