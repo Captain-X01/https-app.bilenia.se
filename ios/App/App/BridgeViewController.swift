@@ -6,6 +6,7 @@ class BridgeViewController: CAPBridgeViewController {
     override open func capacitorDidLoad() {
         super.capacitorDidLoad()
         bridge?.registerPluginInstance(BileniaCalendarPlugin())
+        bridge?.registerPluginInstance(BileniaBrowserPlugin())
         webView?.allowsBackForwardNavigationGestures = true
     }
 }
