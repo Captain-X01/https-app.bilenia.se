@@ -40,57 +40,21 @@ public class BileniaCalendarPlugin: CAPInstancePlugin, CAPBridgedPlugin, EKEvent
         let urlString = call.getString("url")
         let reminderMinutesBefore = call.getInt("reminderMinutesBefore") ?? 60
 
-        requestCalendarAccess { [weak self] granted, error in
+        DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            DispatchQueue.main.async {
-                if let error {
-                    call.reject("Calendar permission error: \(error.localizedDescription)", "PERMISSION")
-                    return
-                }
-                guard granted else {
-                    call.reject(
-                        "Calendar access denied. Enable it in Settings → Privacy → Calendars → Bilenia.",
-                        "PERMISSION_DENIED"
-                    )
-                    return
-                }
-                self.presentEditor(
-                    call: call,
-                    title: title,
-                    startDate: startDate,
-                    endDate: endDate,
-                    notes: notes,
-                    urlString: urlString,
-                    reminderMinutesBefore: reminderMinutesBefore
-                )
-            }
-        }
-    }
-
-    /// iOS 17+: write-only (shows system prompt once). Older: classic event access.
-    private func requestCalendarAccess(completion: @escaping (Bool, Error?) -> Void) {
-        if #available(iOS 17.0, *) {
-            switch EKEventStore.authorizationStatus(for: .event) {
-            case .fullAccess, .writeOnly:
-                completion(true, nil)
-            case .denied, .restricted:
-                completion(false, nil)
-            case .notDetermined:
-                eventStore.requestWriteOnlyAccessToEvents(completion: completion)
-            @unknown default:
-                eventStore.requestWriteOnlyAccessToEvents(completion: completion)
-            }
-        } else {
-            switch EKEventStore.authorizationStatus(for: .event) {
-            case .authorized:
-                completion(true, nil)
-            case .denied, .restricted:
-                completion(false, nil)
-            case .notDetermined:
-                eventStore.requestAccess(to: .event, completion: completion)
-            @unknown default:
-                eventStore.requestAccess(to: .event, completion: completion)
-            }
+            // iOS 17+: EKEventEditViewController runs out-of-process and does NOT
+            // require a prior permission prompt (Apple TN3152 / WWDC23). Requesting
+            // write-only first can fail or no-op on newer iOS (16/26/27) while older
+            // iPhones still worked with the permission path.
+            self.presentEditor(
+                call: call,
+                title: title,
+                startDate: startDate,
+                endDate: endDate,
+                notes: notes,
+                urlString: urlString,
+                reminderMinutesBefore: reminderMinutesBefore
+            )
         }
     }
 
@@ -108,14 +72,11 @@ public class BileniaCalendarPlugin: CAPInstancePlugin, CAPBridgedPlugin, EKEvent
             return
         }
 
-        guard let presenter = bridge?.viewController else {
+        guard let presenter = presentationHost() else {
             call.reject("No view controller available")
             return
         }
 
-        // Do not read defaultCalendarForNewEvents — that needs read access and
-        // triggers Access denied before write-only is granted / without a prompt.
-        // EKEventEditViewController lets the user pick the calendar.
         let event = EKEvent(eventStore: eventStore)
         event.title = title
         event.startDate = startDate
@@ -134,9 +95,32 @@ public class BileniaCalendarPlugin: CAPInstancePlugin, CAPBridgedPlugin, EKEvent
         editor.eventStore = eventStore
         editor.event = event
         editor.editViewDelegate = self
+        editor.modalPresentationStyle = .formSheet
 
         pendingCall = call
         presenter.present(editor, animated: true)
+    }
+
+    /// Topmost VC in the active scene — reliable after UIScene / SceneDelegate.
+    private func presentationHost() -> UIViewController? {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        for scene in scenes where scene.activationState == .foregroundActive {
+            let root =
+                scene.windows.first(where: \.isKeyWindow)?.rootViewController
+                ?? scene.windows.first?.rootViewController
+            if let host = topMost(from: root) {
+                return host
+            }
+        }
+        return topMost(from: bridge?.viewController)
+    }
+
+    private func topMost(from root: UIViewController?) -> UIViewController? {
+        guard var top = root else { return nil }
+        while let presented = top.presentedViewController {
+            top = presented
+        }
+        return top
     }
 
     public func eventEditViewController(

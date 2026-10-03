@@ -1,51 +1,51 @@
-# Native BankID return (custom URL scheme + iOS HTTPS bridge)
+# Native BankID return (ASWebAuthenticationSession + Custom Tabs)
 
 ## Short answers
 
 | Question | Answer |
 |----------|--------|
 | iOS bundle is `se.bilenia.auctions` — does that matter? | **No for opening the app.** Bundle ID ≠ URL scheme. We register schemes `se.bilenia.app` **and** `se.bilenia.auctions` on iOS. |
-| Android vs iOS return | **Android:** `302` → `se.bilenia.app://auth?…` (Custom Tabs). **iOS:** `302` → `https://app.bilenia.se/auth?…&nativeReturn=1` then Auth auto-opens `se.bilenia.app://…` (same-device BankID returns via Safari). |
-| After BankID, does the app show auth again? | **Login/register:** yes — success *or* error → native `#/auth` (dialogs/toasts). **Signing:** → `se.bilenia.app://orders?…` → orders + success/failure dialog. |
-| Affects web? | **No.** Web still uses `https://FRONTEND_URL/auth` *without* `nativeReturn=1`. |
-| Change Idura for login/register? | **No** — Idura allowlist stays API callbacks. |
-| Change Idura for **signing**? | **Maybe.** Native signing sets `signatoryRedirectUri` to `https://<api>/api/v1/listings/contracts/sign-bankid/return?native=1`. If Idura has a strict redirect allowlist, add that HTTPS URL (not the custom scheme). Web signing still uses `IDURA_SIGNATURES_REDIRECT_URI` / `FRONTEND_URL/orders`. |
+| Android vs iOS return | **Both:** API `302` → `se.bilenia.app://auth?…`. Android Custom Tabs / iOS `ASWebAuthenticationSession` capture the scheme. |
+| Same-device on iOS | Backend sends `login_hint=appswitch:resumeUrl:https://app.bilenia.se/bankid-return` (iOS native only). BankID opens that universal link → app foregrounds → auth sheet finishes. App ignores `/bankid-return` in deep-link handling. |
+| Affects web? | **No.** Web still uses `https://FRONTEND_URL/auth` without nativeCode. |
 
-## Why iOS HTTPS bridge?
+## Why appswitch:resumeUrl?
 
-Same-device BankID on iPhone leaves SFSafariViewController and often resumes in **Safari**. A custom-scheme `302` from the in-app browser never runs; session errors used to dump users on plain `/auth` with a misleading error. iOS native sessions send `nativePlatform=ios` so API callbacks redirect to the HTTPS bridge (`nativeReturn=1` + `nativeCode` / errors). Auth.tsx auto-fires the custom scheme and shows “Öppna appen”.
+Same-device BankID leaves the in-app browser for the BankID app. Without Idura’s app-switch `login_hint`, iOS resumes **Safari** instead of `ASWebAuthenticationSession` → Idura picker loop → eventually Safari with `no_account` / errors.
+
+See: https://docs.idura.app/verify/integrations/swift/ (backend-initialized + BrowserManager)
 
 ## Flows
 
-### Login / register (native Android)
+### Login / register (native)
 
-1. `Browser.open(continueUrl)`
-2. Idura → API callback → `nativeCode`
-3. `302 Location: se.bilenia.app://auth?bankid=success&nativeCode=…` (or `bankidError=…`)
-4. App opens → exchange / show error
+1. iOS: `BileniaBrowser.startAuthSession(continueUrl)` / Android: `Browser.open(continueUrl)`
+2. Idura authorize includes `appswitch:resumeUrl` on iOS
+3. BankID same-device → BankID app → resume universal link → auth sheet continues
+4. Idura → API callback → `nativeCode`
+5. `302 Location: se.bilenia.app://auth?bankid=success&nativeCode=…` (or `bankidError=…`)
+6. ASWebAuth / Custom Tabs deliver URL → exchange / show error **in the app**
 
-### Login / register (native iOS)
+## Universal link checklist
 
-1. Same as Android through Idura
-2. API callback → `302 https://app.bilenia.se/auth?bankid=success&nativeCode=…&nativeReturn=1`
-3. Safari loads Auth → auto `se.bilenia.app://auth?…` (+ dialog fallback)
-4. App opens → exchange / show error
-
-### Contract signing (native)
-
-Unchanged for now: still custom-scheme return to `/orders`. Revisit if same-device signing fails on iOS the same way.
+1. `https://app.bilenia.se/.well-known/apple-app-site-association` serves JSON (no redirect) with `AXRBPD8K5N.se.bilenia.auctions` and `/bankid-return*`
+2. Verify Apple's CDN picked it up: `https://app-site-association.cdn-apple.com/a/v1/app.bilenia.se`
+3. Reinstall the app after AASA changes (iOS caches it at install)
 
 ## Env
 
 ```
 NATIVE_APP_URL_SCHEME=se.bilenia.app
+NATIVE_APP_SWITCH_RESUME_URL=https://app.bilenia.se/bankid-return   # optional override
 FRONTEND_URL=https://app.bilenia.se
 BACKEND_PUBLIC_URL=https://api.bilenia.se/api/v1
+IDURA_DOMAIN=bilenia.idura.broker
 ```
 
 ## Rebuild / deploy
 
-1. Deploy **backend** (platform-aware redirects)
-2. Deploy **frontend** (`nativePlatform` on start + Auth auto deep-link)
-3. Rebuild native iOS with the new web assets
-4. Test **same-device** and **other-device** login/register on iPhone; smoke Android + web
+1. Deploy **backend** (`nativeBankIdAuthorize` login_hint)
+2. Deploy **frontend** (ASWebAuth path already in place)
+3. Rebuild + reinstall native iOS
+4. Confirm AASA via Apple CDN URL above
+5. Test **same-device** login on iPhone; smoke Android + web

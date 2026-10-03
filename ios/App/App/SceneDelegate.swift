@@ -2,7 +2,9 @@ import UIKit
 import Capacitor
 
 /// UIScene lifecycle required when building with Xcode 26+/iOS 26+ SDK.
-/// Deep links / Universal Links are forwarded via SceneDelegateProxy (Capacitor 8.5+).
+///
+/// Forwards deep links / Universal Links via ApplicationDelegateProxy so this
+/// compiles against Capacitor 8.3–8.5 (SceneDelegateProxy only exists in 8.5+ SPM).
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
@@ -14,20 +16,43 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
 
         // Use our CAPBridgeViewController subclass (plugins + edge-swipe).
-        // Window is created in code; Main.storyboard no longer owns the root window.
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = BridgeViewController()
         self.window = window
         window.makeKeyAndVisible()
 
-        SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
+        // Cold-start deep links arrive in connectionOptions (not openURLContexts).
+        for context in connectionOptions.urlContexts {
+            _ = ApplicationDelegateProxy.shared.application(
+                UIApplication.shared,
+                open: context.url,
+                options: [:]
+            )
+        }
+        for userActivity in connectionOptions.userActivities {
+            _ = ApplicationDelegateProxy.shared.application(
+                UIApplication.shared,
+                continue: userActivity,
+                restorationHandler: { _ in }
+            )
+        }
     }
 
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        SceneDelegateProxy.shared.scene(scene, openURLContexts: URLContexts)
+        for context in URLContexts {
+            _ = ApplicationDelegateProxy.shared.application(
+                UIApplication.shared,
+                open: context.url,
+                options: [:]
+            )
+        }
     }
 
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        SceneDelegateProxy.shared.scene(scene, continue: userActivity)
+        _ = ApplicationDelegateProxy.shared.application(
+            UIApplication.shared,
+            continue: userActivity,
+            restorationHandler: { _ in }
+        )
     }
 }

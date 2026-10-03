@@ -94,8 +94,9 @@ public class BileniaBrowserPlugin: CAPInstancePlugin, CAPBridgedPlugin, ASWebAut
                 call.resolve(["url": callbackURL.absoluteString])
             }
 
-            // Keep cookies inside this session across BankID app handoff (same-device).
-            session.prefersEphemeralWebBrowserSession = false
+            // Ephemeral skips iOS's "wants to use … to sign in" alert. Cookies still
+            // survive the BankID app handoff for as long as this session is open.
+            session.prefersEphemeralWebBrowserSession = true
             session.presentationContextProvider = self
             self.authSession = session
 
