@@ -9,7 +9,7 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
+        android:usesCleartextTraffic="false"
         tools:replace="android:usesCleartextTraffic"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
@@ -56,35 +56,8 @@
                     android:pathPrefix="/notifications" />
             </intent-filter>
 
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="app.bilenia.se"
-                    android:pathPrefix="/auth" />
-            </intent-filter>
-
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="app.bilenia.se"
-                    android:pathPrefix="/kyc" />
-            </intent-filter>
-
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="app.bilenia.se"
-                    android:pathPrefix="/orders" />
-            </intent-filter>
+            <!-- BankID / KYC / orders return via se.bilenia.app:// — do NOT App-Link
+                 https://app.bilenia.se/auth (cookie-less WebView open = logged-out /auth). -->
 
             <!-- Custom scheme return from BankID Custom Tabs (does not need App Link verification) -->
             <intent-filter>
