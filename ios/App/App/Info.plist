@@ -69,6 +69,8 @@
 	<key>NSCameraUsageDescription</key>
 	<string
     >Bilenia behöver kameran för att ta bilder till din profil och fordonsannonser.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Bilenia behöver mikrofonen för att spela in motorljud till motorvideon.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Bilenia behöver åtkomst till bilder för att ladda upp foton.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
