@@ -50,7 +50,12 @@ if [ -f "$ENV_FILE" ]; then
   echo "Skrev .env.capacitor för mobil-build (${PROFILE}) från ${ENV_FILE}"
 fi
 
-npm ci
+# Skip when node_modules already exist (Windows: npm ci while Vite runs → EPERM locks).
+if [ "${SKIP_NPM_CI:-}" = "1" ]; then
+  echo "SKIP_NPM_CI=1 — hoppar över npm ci"
+else
+  npm ci
+fi
 npm run build:mobile
 
 if [ ! -d "$FRONTEND_OUT" ]; then
